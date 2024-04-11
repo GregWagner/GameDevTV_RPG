@@ -6,9 +6,6 @@ public class Mover : MonoBehaviour {
     [SerializeField] private Transform _target;
 
     private void Update() {
-        if (Input.GetMouseButton(0)) {
-            MoveToCursor();
-        }
         UpdateAnimator();
     }
 
@@ -25,14 +22,8 @@ public class Mover : MonoBehaviour {
         GetComponent<Animator>().SetFloat("forwardSpeed", speed);
     }
 
-    private void MoveToCursor() {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        bool hasHit = Physics.Raycast(ray, out hit, 100f);
-        if (hasHit) {
-            var agent = GetComponent<NavMeshAgent>();
-            agent.destination = hit.point;
-        }
-        //Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
+    public void MoveTo(Vector3 destination) {
+        var agent = GetComponent<NavMeshAgent>();
+        agent.destination = destination;
     }
 }
