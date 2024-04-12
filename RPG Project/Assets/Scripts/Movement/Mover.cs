@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG.Combat;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,6 +30,11 @@ namespace RPG.Movement {
             GetComponent<Animator>().SetFloat("forwardSpeed", speed);
         }
 
+        public void StartMoveAction(Vector3 destination) {
+            GetComponent<Fighter>().Cancel();
+            MoveTo(destination);
+        }
+
         public void MoveTo(Vector3 destination) {
             navMeshAgent.destination = destination;
             navMeshAgent.isStopped = false;
@@ -36,6 +42,10 @@ namespace RPG.Movement {
 
         public void Stop() {
             navMeshAgent.isStopped = true;
+        }
+
+        public void Cancel() {
+            _target = null;
         }
     }
 }
