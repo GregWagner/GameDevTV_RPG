@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+
 namespace RPG.Core {
     public class ActionSchedular : MonoBehaviour {
-        MonoBehaviour currentAction = null;
-        public void StartAction(MonoBehaviour action) {
+        IAction currentAction = null;
+        public void StartAction(IAction action) {
             if (currentAction == action) {
                 return;
             }
             if (currentAction != null) {
+                currentAction.Cancel();
                 print($"Cancelling {currentAction}");
             }
             currentAction = action;
