@@ -6,13 +6,19 @@ namespace RPG.Movement {
     public class Mover : MonoBehaviour {
         [SerializeField] private Transform _target;
 
+        private NavMeshAgent navMeshAgent;
+
+        private void Start() {
+            navMeshAgent = GetComponent<NavMeshAgent>();
+        }
+
         private void Update() {
             UpdateAnimator();
         }
 
         private void UpdateAnimator() {
             // get the global velocity from the nav mesh agent
-            Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+            Vector3 velocity = navMeshAgent.velocity;
 
             // convert it to a local velocity
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
@@ -24,8 +30,12 @@ namespace RPG.Movement {
         }
 
         public void MoveTo(Vector3 destination) {
-            var agent = GetComponent<NavMeshAgent>();
-            agent.destination = destination;
+            navMeshAgent.destination = destination;
+            navMeshAgent.isStopped = false;
+        }
+
+        public void Stop() {
+            navMeshAgent.isStopped = true;
         }
     }
 }
