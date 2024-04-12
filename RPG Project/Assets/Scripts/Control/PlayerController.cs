@@ -1,4 +1,4 @@
-﻿using RPG.Characters;
+﻿using RPG.Movement;
 using UnityEngine;
 
 namespace RPG.Control {

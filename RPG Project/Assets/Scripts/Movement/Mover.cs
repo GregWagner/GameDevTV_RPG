@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace RPG.Characters {
+namespace RPG.Movement {
     public class Mover : MonoBehaviour {
         [SerializeField] private Transform _target;
 
