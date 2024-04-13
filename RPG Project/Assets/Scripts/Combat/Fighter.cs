@@ -9,7 +9,7 @@ namespace RPG.Combat {
         [SerializeField] private float weaponDamage = 5.0f;
         [SerializeField] private float timeBetweenAttacks = 1.0f;
 
-        private Transform target;
+        private Health target;
         private float timeSinceLastAttack = 0.0f;
 
         private void Update() {
@@ -17,8 +17,13 @@ namespace RPG.Combat {
             if (target == null) {
                 return;
             }
+
+            if (target.IsDead()) {
+                return;
+            }
+
             if (!GetIsInRange()) {
-                GetComponent<Mover>().MoveTo(target.position);
+                GetComponent<Mover>().MoveTo(target.transform.position);
             } else {
                 GetComponent<Mover>().Cancel();
                 AttackBehavior();
@@ -35,19 +40,19 @@ namespace RPG.Combat {
 
         // used to unarmed aninator trigger (animation event)
         private void Hit() {
-            Health health = target.GetComponent<Health>();
-            health.TakeDamage(weaponDamage);
+            target.TakeDamage(weaponDamage);
         }
 
         private bool GetIsInRange() {
-            return Vector3.Distance(transform.position, target.position) < weaponRange;
+            return Vector3.Distance(transform.position, target.transform.position) < weaponRange;
         }
 
         public void Attack(CombatTarget combatTarget) {
             GetComponent<ActionSchedular>().StartAction(this);
-            target = combatTarget.transform;
+            target = combatTarget.GetComponent<Health>();
         }
         public void Cancel() {
+            GetComponent<Animator>().SetTrigger("stopAttack");
             target = null;
         }
     }
