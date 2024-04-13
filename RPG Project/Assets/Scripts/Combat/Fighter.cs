@@ -30,22 +30,38 @@ namespace RPG.Combat {
             }
         }
 
+
         private void AttackBehavior() {
             transform.LookAt(target.transform);
             if (timeSinceLastAttack > timeBetweenAttacks) {
-                // this will trigger the Hit() event
-                GetComponent<Animator>().SetTrigger("attack");
+                TriggerAttack();
                 timeSinceLastAttack = 0.0f;
             }
         }
 
+        private void TriggerAttack() {
+            GetComponent<Animator>().ResetTrigger("stopAttack");
+            // this will trigger the Hit() event
+            GetComponent<Animator>().SetTrigger("attack");
+        }
+
         // used to unarmed aninator trigger (animation event)
         private void Hit() {
+            if (target == null) {
+                return;
+            }
             target.TakeDamage(weaponDamage);
         }
 
         private bool GetIsInRange() {
             return Vector3.Distance(transform.position, target.transform.position) < weaponRange;
+        }
+        public bool CanAttack(CombatTarget combatTarget) {
+            if (combatTarget == null) {
+                return false;
+            }
+            Health targetToTest = combatTarget.GetComponent<Health>();
+            return targetToTest != null && !targetToTest.IsDead();
         }
 
         public void Attack(CombatTarget combatTarget) {
@@ -53,8 +69,13 @@ namespace RPG.Combat {
             target = combatTarget.GetComponent<Health>();
         }
         public void Cancel() {
-            GetComponent<Animator>().SetTrigger("stopAttack");
+            StopAttack();
             target = null;
+        }
+
+        private void StopAttack() {
+            GetComponent<Animator>().ResetTrigger("attack");
+            GetComponent<Animator>().SetTrigger("stopAttack");
         }
     }
 }
