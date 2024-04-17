@@ -8,7 +8,7 @@ namespace RPG.Control {
     public class PlayerController : MonoBehaviour {
         private Health health;
 
-        private void Start () {
+        private void Start() {
             health = GetComponent<Health>();
         }
 
@@ -45,7 +45,7 @@ namespace RPG.Control {
         private bool InteractWithMovement() {
             bool hasHit = Physics.Raycast(GetMouseRay(), out RaycastHit hit, 100f);
             if (hasHit) {
-                if (Input.GetMouseButton(0)) {
+                if (Input.GetMouseButtonDown(0)) {
                     GetComponent<Mover>().StartMoveAction(hit.point);
                 }
                 return true;
